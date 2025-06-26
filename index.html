@@ -1,1 +1,507 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบประเมินสมรรถนะนักศึกษา</title>
+    
+    <!-- Google Fonts: Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #FFF1F2; /* Light Pink Background */
+        }
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .form-page {
+            display: none;
+        }
+        .form-page.active {
+            display: block;
+        }
+        .progress-bar-fill {
+            transition: width 0.4s ease-in-out;
+        }
+        /* Custom radio button styles */
+        .radio-label {
+            border: 2px solid #FBCFE8;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: block;
+        }
+        .radio-label:hover {
+            background-color: #FFF1F2;
+        }
+        input[type="radio"]:checked + .radio-label {
+            background-color: #FCE7F3;
+            border-color: #F472B6;
+        }
+        input[type="radio"] {
+            display: none; /* Hide the default radio button */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
 
+    <div class="w-full max-w-3xl">
+        <div class="flex justify-center mb-6">
+            <img src="https://www.wu.ac.th/uploads/logoWU_1631668089.png" alt="Walailak University Logo" class="h-16">
+        </div>
+        
+        <div class="form-container">
+            <form id="assessmentForm">
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                    <div id="progressBar" class="bg-pink-400 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+
+                <!-- Page 1: User Info -->
+                <div id="page1" class="form-page active">
+                    <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">ข้อมูลผู้ประเมินตนเอง</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="studentId" class="block mb-2 text-sm font-medium text-gray-900">รหัสนักศึกษา (8 หลัก)</label>
+                            <input type="text" id="studentId" name="studentId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" placeholder="เช่น 65123456" required>
+                            <p id="studentIdError" class="text-red-500 text-xs mt-1 hidden">กรุณากรอกรหัสนักศึกษาเป็นตัวเลข 8 หลักให้ถูกต้อง</p>
+                        </div>
+                        <div>
+                            <label for="fullName" class="block mb-2 text-sm font-medium text-gray-900">ชื่อ-สกุล</label>
+                            <input type="text" id="fullName" name="fullName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" placeholder="เช่น สมชาย ใจดี" required>
+                        </div>
+                        <div>
+                            <label for="school" class="block mb-2 text-sm font-medium text-gray-900">สำนักวิชา</label>
+                            <select id="school" name="school" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" required>
+                                <option value="" disabled selected>-- กรุณาเลือกสำนักวิชา --</option>
+                                <option value="การจัดการ">การจัดการ</option>
+                                <option value="การบัญชีและการเงิน">การบัญชีและการเงิน</option>
+                                <option value="เทคโนโลยีการเกษตรและอุตสาหกรรมอาหาร">เทคโนโลยีการเกษตรและอุตสาหกรรมอาหาร</option>
+                                <option value="นิติศาสตร์">นิติศาสตร์</option>
+                                <option value="พยาบาลศาสตร์">พยาบาลศาสตร์</option>
+                                <option value="แพทยศาสตร์">แพทยศาสตร์</option>
+                                <option value="เภสัชศาสตร์">เภสัชศาสตร์</option>
+                                <option value="รัฐศาสตร์และรัฐประศาสนศาสตร์">รัฐศาสตร์และรัฐประศาสนศาสตร์</option>
+                                <option value="วิทยาศาสตร์">วิทยาศาสตร์</option>
+                                <option value="วิศวกรรมศาสตร์และเทคโนโลยี">วิศวกรรมศาสตร์และเทคโนโลยี</option>
+                                <option value="ศึกษาศาสตร์">ศึกษาศาสตร์</option>
+                                <option value="ศิลปศาสตร์">ศิลปศาสตร์</option>
+                                <option value="สถาปัตยกรรมศาสตร์และการออกแบบ">สถาปัตยกรรมศาสตร์และการออกแบบ</option>
+                                <option value="สหเวชศาสตร์">สหเวชศาสตร์</option>
+                                <option value="สาธารณสุขศาสตร์">สาธารณสุขศาสตร์</option>
+                                <option value="สารสนเทศศาสตร์">สารสนเทศศาสตร์</option>
+                                <option value="วิทยาลัยทันตแพทยศาสตร์นานาชาติ">วิทยาลัยทันตแพทยศาสตร์นานาชาติ</option>
+                                <option value="วิทยาลัยนานาชาติ">วิทยาลัยนานาชาติ</option>
+                                <option value="วิทยาลัยสัตวแพทยศาสตร์อัครราชกุมารี">วิทยาลัยสัตวแพทยศาสตร์อัครราชกุมารี</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-8">
+                        <button type="button" onclick="nextPage()" class="bg-pink-500 text-white px-6 py-2 rounded-lg hover:bg-pink-600 transition-colors">ถัดไป</button>
+                    </div>
+                </div>
+
+                <!-- Assessment Pages will be generated by JS -->
+                <div id="assessmentPagesContainer"></div>
+
+                <!-- Navigation Buttons will be appended by JS -->
+                <div id="navigationContainer" class="flex justify-between mt-8"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA and CONFIGURATION ---
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyT03JX_xr_xyuizbnxLchEF4r00Ky3FwKtVVE-0H6F3jnvUfb9yuvRLWexzx_GNV8JfQ/exec';
+        
+        const questions = [
+            // C1
+            {
+                topic: "1. ภาวะผู้นำและผู้เปลี่ยนแปลงทางสังคม",
+                options: [
+                    { text: "ฉันมักเป็นผู้นำในการทำกิจกรรมต่างๆ ริเริ่มความคิดใหม่ๆ สามารถโน้มน้าวและสร้างแรงบันดาลใจให้เพื่อนร่วมงาน แสดงความรับผิดชอบสูง และเป็นแบบอย่างที่ดีอย่างสม่ำเสมอ", value: 4 },
+                    { text: "ฉันมักมีส่วนร่วมอย่างแข็งขันในกิจกรรม สามารถนำกลุ่มได้เมื่อมีโอกาส รับผิดชอบงานที่ได้รับมอบหมายได้ดี และพยายามเป็นแบบอย่างที่ดี", value: 3 },
+                    { text: "ฉันมีส่วนร่วมในกิจกรรมเมื่อได้รับมอบหมาย ทำงานตามที่ได้รับมอบหมายได้ แต่ยังไม่ค่อยแสดงความเป็นผู้นำ", value: 2 },
+                    { text: "ฉันมักหลีกเลี่ยงการมีส่วนร่วม ไม่ค่อยแสดงความคิดเห็น และต้องได้รับการกระตุ้นจากผู้อื่น", value: 1 }
+                ]
+            },
+            {
+                topic: "2. การทำงานร่วมกับผู้อื่น (Teamwork and Collaboration)",
+                options: [
+                    { text: "ฉันสามารถทำงานร่วมกับผู้อื่นอย่างโดดเด่นในทุกด้าน ทั้งการสื่อสาร การจัดการอารมณ์ การแก้ปัญหา และความรับผิดชอบ ฉันมีส่วนร่วมอย่างแข็งขันในการทำงานกลุ่ม แสดงความเป็นผู้นำเมื่อจำเป็น และสนับสนุนเพื่อนร่วมทีมอย่างสม่ำเสมอ นอกจากนี้ ฉันสร้างบรรยากาศการทำงานที่เปิดกว้าง เคารพความคิดเห็นที่แตกต่าง และส่งเสริมความไว้วางใจในทีม", value: 4 },
+                    { text: "ฉันสามารถทำงานร่วมกับผู้อื่นได้ดีในเกือบทุกด้าน โดยมีจุดที่ต้องพัฒนาเล็กน้อย ฉันมีส่วนร่วมในการทำงานกลุ่มอย่างสม่ำเสมอ รับผิดชอบงานที่ได้รับมอบหมาย อีกทั้งฉันสร้างความสัมพันธ์ที่ดีกับเพื่อนร่วมทีม พร้อมรับฟังและเคารพความคิดเห็นของผู้อื่น", value: 3 },
+                    { text: "ฉันสามารถทำงานร่วมกับผู้อื่นได้ในระดับพื้นฐาน มีหลายจุดที่ต้องพัฒนา โดยฉันมีส่วนร่วมในการทำงานกลุ่มเป็นบางครั้ง ต้องได้รับการกระตุ้นจากเพื่อนร่วมทีม ฉันสื่อสารและทำงานร่วมกับผู้อื่นได้ แต่ยังขาดความต่อเนื่องและความกระตือรือร้น", value: 2 },
+                    { text: "ฉันสามารถทำงานร่วมกับผู้อื่นในระดับต่ำ ต้องได้รับการพัฒนาอย่างมาก ฉันมีส่วนร่วมในการทำงานกลุ่มน้อย ไม่ค่อยรับผิดชอบงานที่ได้รับมอบหมาย อีกทั้งฉันมีปัญหาในการสื่อสารและทำงานร่วมกับผู้อื่น และขาดการมีส่วนร่วมในทีม", value: 1 }
+                ]
+            },
+            {
+                topic: "3. การคิดวิเคราะห์และการคิดอย่างมีวิจารณญาณ (Critical and Analytical Thinking)",
+                options: [
+                    { text: "ฉันสามารถวิเคราะห์ประเด็นสำคัญได้อย่างครบถ้วน มองเห็นความเชื่อมโยงระหว่างข้อมูลต่างๆ ได้อย่างเป็นระบบ ประยุกต์ใช้ทฤษฎีและหลักการได้อย่างเหมาะสม และสามารถประเมินข้อมูลเพื่อตัดสินใจได้อย่างมีประสิทธิภาพ พร้อมทั้งนำเสนอมุมมองใหม่ๆ ที่เป็นประโยชน์", value: 4 },
+                    { text: "ฉันสามารถวิเคราะห์ประเด็นสำคัญได้ดี เชื่อมโยงข้อมูลได้อย่างมีเหตุผล ใช้หลักการและทฤษฎีได้เหมาะสม และประเมินข้อมูลเพื่อตัดสินใจได้ดี แต่อาจยังขาดความลึกซึ้งในบางประเด็น", value: 3 },
+                    { text: "ฉันสามารถระบุประเด็นสำคัญและความสัมพันธ์พื้นฐานได้ แต่ยังต้องพัฒนาการวิเคราะห์เชิงลึกและการประเมินสถานการณ์ที่ซับซ้อน", value: 2 },
+                    { text: "ฉันยังมีความยากลำบากในการวิเคราะห์ประเด็นสำคัญ ไม่สามารถเชื่อมโยงข้อมูลได้ชัดเจน และต้องพัฒนาทักษะการคิดวิเคราะห์เพิ่มเติม", value: 1 }
+                ]
+            },
+            {
+                topic: "4. การแก้ไขปัญหาเชิงซับซ้อน (Complex Problem Solving)",
+                options: [
+                    { text: "ฉันสามารถวิเคราะห์โจทย์ปัญหาที่ซับซ้อนได้อย่างลึกซึ้ง มองเห็นความเชื่อมโยงระหว่างส่วนต่างๆ ของปัญหา คิดค้นวิธีแก้ปัญหาที่สร้างสรรค์ และปรับเปลี่ยนวิธีการได้ตามสถานการณ์ สามารถอธิบายเหตุผลและที่มาของวิธีแก้ปัญหาได้ชัดเจน", value: 4 },
+                    { text: "ฉันสามารถวิเคราะห์โจทย์ปัญหาได้ดี เชื่อมโยงข้อมูลได้อย่างเหมาะสม เสนอวิธีแก้ปัญหาได้ดี แต่ยังต้องพัฒนาความลึกซึ้งและความยืดหยุ่นในบางประเด็น", value: 3 },
+                    { text: "ฉันสามารถระบุปัญหาได้ แต่ต้องการคำแนะนำเพิ่มเติมในการคิดเชิงลึก เสนอวิธีแก้ปัญหาขั้นพื้นฐานและการปรับตัวต่อสถานการณ์ซับซ้อน", value: 2 },
+                    { text: "ฉันมีความยากลำบากในการระบุและแก้ปัญหา ไม่สามารถเชื่อมโยงข้อมูลหรือปรับตัวได้ ต้องพัฒนาทักษะการวิเคราะห์และการแก้ปัญหาอย่างมาก", value: 1 }
+                ]
+            },
+            // C2
+             {
+                topic: "5. การสื่อสารอย่างมีประสิทธิภาพ (Effective Communication)",
+                options: [
+                    { text: "ฉันสามารถสื่อสารได้อย่างมีประสิทธิภาพในทุกสถานการณ์ เรียบเรียงความคิดได้เป็นระบบ เลือกใช้เครื่องมือสื่อสารได้เหมาะสม แสดงออกได้อย่างเหมาะสม และสามารถโต้ตอบได้อย่างมีประสิทธิภาพ สร้างความเข้าใจที่ชัดเจนและได้รับการตอบรับที่ดี", value: 4 },
+                    { text: "ฉันสามารถสื่อสารได้ดีในสถานการณ์ส่วนใหญ่ จัดลำดับความคิดได้ เลือกใช้เครื่องมือสื่อสารได้เหมาะสม แสดงออกและโต้ตอบได้ดี ผู้อื่นเข้าใจสิ่งที่ฉันสื่อสาร", value: 3 },
+                    { text: "ฉันสื่อสารได้ในระดับพื้นฐาน จัดลำดับความคิดได้บ้าง เลือกใช้เครื่องมือสื่อสารได้ แต่บางครั้งอาจไม่เหมาะสม การแสดงออกและการโต้ตอบยังต้องพัฒนา", value: 2 },
+                    { text: "ฉันมีความยากลำบากในการสื่อสาร ความคิดไม่เป็นระบบ เลือกใช้เครื่องมือสื่อสารไม่เหมาะสม การแสดงออกและการโต้ตอบยังไม่มีประสิทธิภาพ", value: 1 }
+                ]
+            },
+            {
+                topic: "6. ความคิดสร้างสรรค์ (Creativity)",
+                options: [
+                    { text: "ฉันสามารถคิดริเริ่มสิ่งใหม่ ๆ ได้อย่างโดดเด่น นำเสนอความคิดได้คล่องแคล่วและหลากหลาย ปรับเปลี่ยนมุมมองได้อย่างยืดหยุ่น และให้ความสำคัญกับรายละเอียดทุกขั้นตอน สามารถสร้างสรรค์ผลงานที่แปลกใหม่และมีคุณค่า", value: 4 },
+                    { text: "ฉันสามารถคิดริเริ่มสิ่งใหม่ได้ นำเสนอความคิดได้หลายแนวทาง ปรับเปลี่ยนมุมมองตามสถานการณ์ และใส่ใจในรายละเอียดสำคัญ", value: 3 },
+                    { text: "ฉันสามารถคิดริเริ่มได้บ้าง นำเสนอความคิดได้จำกัด ปรับเปลี่ยนมุมมองเมื่อได้รับคำแนะนำ และอาจละเลยรายละเอียดบางส่วน", value: 2 },
+                    { text: "ฉันยังไม่สามารถคิดริเริ่มสิ่งใหม่ มีข้อจำกัดในการนำเสนอความคิด ไม่ยืดหยุ่นในการปรับมุมมอง และมักละเลยรายละเอียด", value: 1 }
+                ]
+            },
+            {
+                topic: "7. ความซื่อสัตย์",
+                options: [
+                    { text: "ฉันแสดงความซื่อสัตย์อย่างสม่ำเสมอทั้งต่อตนเองและผู้อื่น มีความรับผิดชอบสูง เคารพกฎระเบียบ รักษาคำพูด ยึดมั่นในความถูกต้อง ไม่คัดลอกผลงาน อ้างอิงข้อมูลอย่างถูกต้อง และรักษาผลประโยชน์ส่วนรวม เป็นที่ไว้วางใจของอาจารย์และเพื่อน", value: 4 },
+                    { text: "ฉันมีความซื่อสัตย์ในการเรียนและการทำงาน รับผิดชอบต่อหน้าที่ เคารพกฎระเบียบ ทำงานด้วยตนเอง และปฏิบัติต่อผู้อื่นด้วยความเป็นธรรม", value: 3 },
+                    { text: "ฉันพยายามรักษาความซื่อสัตย์ แต่บางครั้งอาจหลีกเลี่ยงความรับผิดชอบ ละเลยกฎระเบียบบางข้อ หรือขาดความระมัดระวังในการอ้างอิงผลงาน", value: 2 },
+                    { text: "ฉันมักขาดความซื่อสัตย์ในการเรียนและการทำงาน ละเลยความรับผิดชอบ ไม่ปฏิบัติตามกฎระเบียบ และมีพฤติกรรมที่ไม่เหมาะสมในการทำงานร่วมกับผู้อื่น", value: 1 }
+                ]
+            },
+            {
+                topic: "8. ความกตัญญู",
+                options: [
+                    { text: "ฉันแสดงความกตัญญูอย่างสม่ำเสมอ ตระหนักและซาบซึ้งในพระคุณของพ่อแม่ ครูอาจารย์ และสถาบัน มีความรู้สึกที่ดีและแรงจูงใจในการตอบแทนคุณ แสดงออกผ่านการตั้งใจเรียน ช่วยเหลือกิจกรรม และสร้างชื่อเสียงให้สถาบัน", value: 4 },
+                    { text: "ฉันแสดงความกตัญญู รู้คุณของผู้มีพระคุณ มีความรู้สึกที่ดี และตอบแทนด้วยการตั้งใจเรียนและร่วมกิจกรรมอย่างสม่ำเสมอ", value: 3 },
+                    { text: "ฉันแสดงความกตัญญูเมื่อมีโอกาส รับรู้พระคุณของผู้อื่นในระดับพื้นฐาน และตอบแทนตามที่ถูกร้องขอ", value: 2 },
+                    { text: "ฉันไม่ค่อยแสดงความกตัญญู ไม่ตระหนักถึงพระคุณของผู้อื่น และไม่ได้ตอบแทนคุณอย่างเหมาะสม", value: 1 }
+                ]
+            },
+             // C3
+            {
+                topic: "9. ทักษะด้านดิจิทัล (Digital Skills)",
+                options: [
+                    { text: "ฉันสามารถใช้เทคโนโลยีดิจิทัลได้อย่างมีประสิทธิภาพในทุกด้าน ทั้งการใช้อุปกรณ์พื้นฐาน การสื่อสารออนไลน์ การสืบค้นข้อมูล การเรียนรู้ด้วยตนเอง และการสร้างเนื้อหาดิจิทัล ฉันใส่ใจเรื่องความปลอดภัยและจริยธรรมในการใช้เทคโนโลยี สามารถแก้ไขปัญหาทางเทคนิคได้ด้วยตนเอง และกระตือรือร้นในการเรียนรู้เทคโนโลยีใหม่ๆ อยู่เสมอ", value: 4 },
+                    { text: "ฉันสามารถใช้เทคโนโลยีดิจิทัลได้ดีในเกือบทุกด้าน มีความเข้าใจพื้นฐานที่ดี สื่อสารออนไลน์ได้อย่างเหมาะสม สืบค้นและจัดการข้อมูลได้ สามารถเรียนรู้ด้วยตนเองและสร้างเนื้อหาดิจิทัลได้ตามที่ต้องการ แม้อาจต้องการคำแนะนำในบางครั้ง", value: 3 },
+                    { text: "ฉันสามารถใช้เทคโนโลยีดิจิทัลได้ในระดับพื้นฐาน แต่ยังต้องพัฒนาในหลายด้าน ฉันสื่อสารออนไลน์และสืบค้นข้อมูลได้ แต่อาจมีข้อจำกัดในการสร้างเนื้อหาดิจิทัลที่ซับซ้อน และต้องการความช่วยเหลือในการแก้ไขปัญหาทางเทคนิค", value: 2 },
+                    { text: "ฉันมีความยากลำบากในการใช้เทคโนโลยีดิจิทัลหลายด้าน ทั้งการใช้งานพื้นฐาน การสื่อสารออนไลน์ การสืบค้นข้อมูล และการสร้างเนื้อหาดิจิทัล ฉันต้องการการพัฒนาทักษะอย่างมากเพื่อให้สามารถใช้เทคโนโลยีได้อย่างมีประสิทธิภาพ", value: 1 }
+                ]
+            },
+            {
+                topic: "10. ความมีวินัย",
+                options: [
+                    { text: "ฉันสามารถควบคุมตนเองได้ดี มีความรับผิดชอบสูง เข้าเรียนตรงเวลาสม่ำเสมอ ส่งงานที่มีคุณภาพครบถ้วนตามกำหนด มีการเตรียมตัวก่อนเรียนเป็นอย่างดี จัดการเวลาเรียนและกิจกรรมได้อย่างมีประสิทธิภาพ และปฏิบัติตามกฎระเบียบอย่างเคร่งครัด", value: 4 },
+                    { text: "ฉันสามารถควบคุมตนเองได้ มีความรับผิดชอบ เข้าเรียนตรงเวลาเป็นส่วนใหญ่ ส่งงานครบถ้วนตามกำหนด มีการเตรียมตัวก่อนเรียน จัดการเวลาเรียนและกิจกรรมได้ดี และปฏิบัติตามกฎระเบียบ", value: 3 },
+                    { text: "ฉันควบคุมตนเองได้ในระดับพื้นฐาน เข้าเรียนสายบ้างเป็นบางครั้ง ส่งงานล่าช้าหรือไม่ครบถ้วนบ้าง การเตรียมตัวก่อนเรียนและการจัดการเวลายังต้องปรับปรุง และปฏิบัติตามกฎระเบียบไม่สม่ำเสมอ", value: 2 },
+                    { text: "ฉันมีปัญหาด้านวินัยที่ต้องปรับปรุง ขาดการควบคุมตนเอง เข้าเรียนสายหรือขาดเรียนบ่อย ส่งงานล่าช้าหรือไม่ครบถ้วน ขาดการเตรียมตัวก่อนเรียน การจัดการเวลาไม่มีประสิทธิภาพ และไม่ค่อยปฏิบัติตามกฎระเบียบ", value: 1 }
+                ]
+            },
+            {
+                topic: "11. มีใจอาสา",
+                options: [
+                    { text: "ฉันแสดงออกถึงการมีใจอาสาในระดับดีเยี่ยม ฉันมีความรู้สึกเป็นส่วนหนึ่งของชุมชนการศึกษา มีความห่วงใยต่อปัญหาส่วนรวม กระตือรือร้นในการช่วยเหลือผู้อื่นโดยไม่ต้องร้องขอ มีส่วนร่วมในกิจกรรมจิตอาสาอย่างสม่ำเสมอ ช่วยเหลือเพื่อนในการเรียนรู้อย่างเต็มใจ และปฏิบัติตนด้วยคุณธรรมจริยธรรม", value: 4 },
+                    { text: "ฉันแสดงออกถึงการมีใจอาสาในระดับดี ฉันรู้สึกเป็นส่วนหนึ่งของชุมชน ใส่ใจต่อปัญหาส่วนรวม พร้อมช่วยเหลือผู้อื่นเมื่อมีโอกาส เข้าร่วมกิจกรรมจิตอาสาเป็นประจำ ช่วยเหลือเพื่อนในการเรียนรู้ และมีคุณธรรมจริยธรรม", value: 3 },
+                    { text: "ฉันแสดงออกถึงการมีใจอาสาในระดับพอใช้ ฉันเริ่มรู้สึกเป็นส่วนหนึ่งของชุมชน สนใจปัญหาส่วนรวมบ้าง ช่วยเหลือผู้อื่นเมื่อถูกร้องขอ เข้าร่วมกิจกรรมจิตอาสาเป็นบางครั้ง ช่วยเหลือเพื่อนในการเรียนเมื่อมีคนขอ", value: 2 },
+                    { text: "ฉันยังต้องพัฒนาการมีใจอาสา ฉันไม่ค่อยรู้สึกเป็นส่วนหนึ่งของชุมชน ไม่ค่อยสนใจปัญหาส่วนรวม ไม่ค่อยช่วยเหลือผู้อื่น แทบไม่เข้าร่วมกิจกรรมจิตอาสา และไม่ค่อยช่วยเหลือเพื่อนในการเรียน", value: 1 }
+                ]
+            },
+            {
+                topic: "12. การเป็นผู้ประกอบการ (Entrepreneurship)",
+                options: [
+                    { text: "ฉันแสดงคุณลักษณะของการเป็นผู้ประกอบการในระดับดีเยี่ยม ฉันมีความคิดสร้างสรรค์และกล้าทดลองแนวคิดใหม่ๆ แสดงความมุ่งมั่นและอดทนในการพัฒนาตนเอง วางแผนและบริหารจัดการโครงงานได้อย่างมีประสิทธิภาพ สื่อสารและนำเสนอผลงานได้อย่างโดดเด่น และดำเนินงานด้วยความซื่อสัตย์และรับผิดชอบอย่างสม่ำเสมอ", value: 4 },
+                    { text: "ฉันแสดงคุณลักษณะของการเป็นผู้ประกอบการในระดับดี ฉันมีความคิดสร้างสรรค์ กล้าทดลองแนวคิดใหม่ มีความมุ่งมั่นในการพัฒนา วางแผนและบริหารจัดการโครงงานได้ดี สื่อสารและนำเสนอผลงานได้อย่างมีคุณภาพ และดำเนินงานด้วยความซื่อสัตย์และรับผิดชอบ", value: 3 },
+                    { text: "ฉันแสดงคุณลักษณะของการเป็นผู้ประกอบการในระดับพื้นฐาน ฉันมีความคิดสร้างสรรค์บ้าง ทดลองแนวคิดใหม่เมื่อมีผู้แนะนำ มีความมุ่งมั่นในระดับหนึ่ง วางแผนและบริหารจัดการโครงงานได้เมื่อมีคำแนะนำ สื่อสารและนำเสนอผลงานได้ในระดับพื้นฐาน", value: 2 },
+                    { text: "ฉันยังต้องพัฒนาคุณลักษณะของการเป็นผู้ประกอบการ ฉันมีข้อจำกัดในการคิดสร้างสรรค์ หลีกเลี่ยงการทดลองแนวคิดใหม่ ขาดความมุ่งมั่นในการพัฒนา มีปัญหาในการวางแผนและบริหารจัดการ และมีข้อจำกัดในการสื่อสารและนำเสนอผลงาน", value: 1 }
+                ]
+            },
+            // C4
+            {
+                topic: "13. ทักษะการใฝ่รู้ใฝ่เรียน",
+                options: [
+                    { text: "ฉันมีความกระตือรือร้นในการเรียนรู้เสมอ เตรียมตัวก่อนเรียน กล้าถามเมื่อสงสัย ชอบค้นคว้าเพิ่มเติมด้วยตนเอง จดบันทึกและทบทวนความรู้สม่ำเสมอ สามารถเชื่อมโยงความรู้และนำไปใช้ได้จริง มักแบ่งปันความรู้กับเพื่อน", value: 4 },
+                    { text: "ฉันสนใจการเรียนรู้ เข้าเรียนสม่ำเสมอ ถามเมื่อไม่เข้าใจ ทำงานที่ได้รับมอบหมายครบ จดบันทึกการเรียน และพยายามนำความรู้ไปใช้", value: 3 },
+                    { text: "ฉันเรียนรู้ตามที่ได้รับมอบหมาย ถามนานๆ ครั้ง จดบันทึกบ้างเป็นบางครั้ง ทำงานไม่ค่อยครบ และนำความรู้ไปใช้ได้บ้าง", value: 2 },
+                    { text: "ฉันไม่ค่อยสนใจการเรียน ไม่กล้าถาม ไม่ค้นคว้าเพิ่มเติม ไม่จดบันทึก ทำงานไม่ครบ และไม่สามารถนำความรู้ไปใช้ได้", value: 1 }
+                ]
+            },
+             {
+                topic: "14. การมีสุขภาวะ (Well-being / Health Literacy)",
+                options: [
+                    { text: "ฉันมีสุขภาพร่างกายแข็งแรง เข้าเรียนสม่ำเสมอ มีสมาธิในการเรียน จัดการความเครียดได้ดี มีความมั่นใจในตนเอง มีความสุขกับการเรียนและกิจกรรมต่างๆ มีเพื่อนที่ดี สื่อสารและทำงานร่วมกับผู้อื่นได้อย่างมีความสุข เข้าใจบทเรียนได้ดี และสามารถประยุกต์ความรู้ในสถานการณ์ต่างๆ ได้", value: 4 },
+                    { text: "ฉันมีสุขภาพดี เข้าเรียนค่อนข้างสม่ำเสมอ มีสมาธิในการเรียนพอสมควร จัดการความเครียดได้ มีความมั่นใจ มีความสุขกับการเรียน มีเพื่อนและสามารถทำงานร่วมกับผู้อื่นได้ เข้าใจบทเรียนและนำความรู้ไปใช้ได้", value: 3 },
+                    { text: "ฉันมีปัญหาสุขภาพบ้าง ขาดเรียนบางครั้ง มีสมาธิในการเรียนไม่ดีนัก รู้สึกเครียดบ่อย ไม่ค่อยมั่นใจ มีเพื่อนไม่มาก ทำงานกลุ่มได้แต่ไม่ถนัด และเข้าใจบทเรียนได้บ้างแต่ต้องได้รับคำแนะนำ", value: 2 },
+                    { text: "ฉันมีปัญหาสุขภาพบ่อย ขาดเรียนบ่อย ไม่มีสมาธิในการเรียน มีความเครียดสูง ขาดความมั่นใจ ไม่ชอบเข้าสังคม มีปัญหาในการทำงานกลุ่ม และมีความยากลำบากในการเรียนรู้", value: 1 }
+                ]
+            },
+            {
+                topic: "15. ทักษะภาษาอังกฤษ",
+                options: [
+                    { text: "ฉันสามารถใช้ภาษาอังกฤษได้อย่างมั่นใจ เข้าใจการบรรยายและการอภิปรายในชั้นเรียนได้ดี กล้าแสดงความคิดเห็นและนำเสนองานเป็นภาษาอังกฤษ อ่านตำราและบทความวิชาการได้คล่องแคล่ว และเขียนรายงานหรืองานวิชาการได้อย่างมีคุณภาพ", value: 4 },
+                    { text: "ฉันใช้ภาษาอังกฤษได้ดี เข้าใจการบรรยายส่วนใหญ่ สามารถแสดงความคิดเห็นและนำเสนองานได้ อ่านตำราและบทความได้เข้าใจ และเขียนรายงานได้ แม้อาจมีข้อผิดพลาดบ้าง", value: 3 },
+                    { text: "ฉันใช้ภาษาอังกฤษได้ในระดับพื้นฐาน เข้าใจการบรรยายได้บางส่วน พูดและนำเสนอได้แต่ไม่คล่อง อ่านตำราได้ช้า และเขียนรายงานได้แต่มีข้อผิดพลาดมาก", value: 2 },
+                    { text: "ฉันมีความยากลำบากในการใช้ภาษาอังกฤษ มีปัญหาในการเข้าใจการบรรยาย ไม่กล้าพูดหรือนำเสนอ อ่านตำราได้ยาก และเขียนรายงานได้ไม่ดี", value: 1 }
+            },
+            {
+                topic: "16. กรอบแนวคิดแบบเติบโต (Growth mindset)",
+                options: [
+                    { text: "ฉันมุ่งมั่นในการพัฒนาตนเองอย่างต่อเนื่อง มองความท้าทายเป็นโอกาสในการเติบโต กระตือรือร้นที่จะเรียนรู้สิ่งใหม่ๆ ยอมรับข้อผิดพลาดและใช้มันเป็นบทเรียน ค้นคว้าหาความรู้เพิ่มเติมด้วยตนเอง และพร้อมลองวิธีการใหม่ๆ ในการเรียนรู้", value: 4 },
+                    { text: "ฉันพยายามพัฒนาตนเองอย่างสม่ำเสมอ รับมือกับความท้าทายได้ดี เปิดรับการเรียนรู้สิ่งใหม่ ยอมรับข้อผิดพลาดและพยายามปรับปรุง ศึกษาหาความรู้เพิ่มเติมตามที่ได้รับมอบหมาย", value: 3 },
+                    { text: "ฉันพัฒนาตนเองเฉพาะเมื่อจำเป็น มักหลีกเลี่ยงงานที่ยากหรือท้าทาย ไม่ค่อยสนใจเรียนรู้สิ่งใหม่ ยอมรับข้อผิดพลาดได้บ้าง ศึกษาเพิ่มเติมเมื่อมีคนบอกให้ทำ", value: 2 },
+                    { text: "ฉันไม่ค่อยสนใจพัฒนาตนเอง หลีกเลี่ยงงานที่ยาก ไม่อยากเรียนรู้สิ่งใหม่ ไม่ยอมรับข้อผิดพลาด ไม่ศึกษาค้นคว้าเพิ่มเติม", value: 1 }
+                ]
+            }
+        ];
+
+        const QUESTIONS_PER_PAGE = 4;
+        const totalQuestionPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+        const totalPages = 1 + totalQuestionPages; // 1 for user info page
+        let currentPage = 1;
+
+        // --- FUNCTIONS ---
+
+        function renderQuestions() {
+            const container = document.getElementById('assessmentPagesContainer');
+            let questionCounter = 0;
+
+            for (let i = 0; i < totalQuestionPages; i++) {
+                const pageDiv = document.createElement('div');
+                pageDiv.id = `page${i + 2}`;
+                pageDiv.className = 'form-page';
+
+                const questionsForPage = questions.slice(i * QUESTIONS_PER_PAGE, (i + 1) * QUESTIONS_PER_PAGE);
+
+                let pageHTML = `<h2 class="text-2xl font-bold mb-4 text-center text-gray-700">ส่วนที่ ${i + 1}: ประเมินสมรรถนะ</h2>`;
+
+                questionsForPage.forEach((q, index) => {
+                    questionCounter++;
+                    pageHTML += `
+                        <div class="my-6">
+                            <p class="font-semibold text-gray-800 mb-3">${q.topic}</p>
+                            <div class="space-y-3">
+                    `;
+                    q.options.forEach((opt, optIndex) => {
+                        pageHTML += `
+                            <div>
+                                <input type="radio" id="q${questionCounter}_opt${optIndex}" name="q${questionCounter}" value="${opt.value}" required>
+                                <label for="q${questionCounter}_opt${optIndex}" class="radio-label text-sm">
+                                    ${opt.text}
+                                </label>
+                            </div>
+                        `;
+                    });
+                    pageHTML += `</div></div>`;
+                });
+                pageDiv.innerHTML = pageHTML;
+                container.appendChild(pageDiv);
+            }
+        }
+        
+        function updateProgressBar() {
+            const progress = ((currentPage - 1) / (totalPages-1)) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+        
+        function showPage(pageNumber) {
+            document.querySelectorAll('.form-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(`page${pageNumber}`).classList.add('active');
+            updateProgressBar();
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            const navContainer = document.getElementById('navigationContainer');
+            navContainer.innerHTML = ''; // Clear existing buttons
+
+            let buttons = '';
+            // Previous Button
+            if (currentPage > 1) {
+                buttons += `<button type="button" onclick="prevPage()" class="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors">ย้อนกลับ</button>`;
+            } else {
+                 buttons += `<div></div>`; // Placeholder for alignment
+            }
+            
+            // Next/Submit Button
+            if (currentPage < totalPages) {
+                 buttons += `<button type="button" onclick="nextPage()" class="bg-pink-500 text-white px-6 py-2 rounded-lg hover:bg-pink-600 transition-colors">ถัดไป</button>`;
+            } else {
+                 buttons += `<button type="submit" class="bg-green-500 text-white px-8 py-2 rounded-lg hover:bg-green-600 transition-colors font-semibold">ส่งแบบประเมิน</button>`;
+            }
+            navContainer.innerHTML = buttons;
+             // Hide nav on the first page
+            navContainer.style.display = currentPage === 1 ? 'none' : 'flex';
+        }
+        
+        function validateUserInfo() {
+            const studentIdInput = document.getElementById('studentId');
+            const fullNameInput = document.getElementById('fullName');
+            const schoolInput = document.getElementById('school');
+            const studentIdError = document.getElementById('studentIdError');
+
+            let isValid = true;
+
+            // Validate Student ID
+            const studentIdRegex = /^\d{8}$/;
+            if (!studentIdRegex.test(studentIdInput.value)) {
+                studentIdError.classList.remove('hidden');
+                studentIdInput.focus();
+                isValid = false;
+            } else {
+                studentIdError.classList.add('hidden');
+            }
+
+            // Validate Full Name
+            if (fullNameInput.value.trim() === '') {
+                // Simple validation, can be improved
+                isValid = false;
+            }
+            
+            // Validate School
+            if (schoolInput.value === '') {
+                 isValid = false;
+            }
+
+            if(!isValid) {
+                 Swal.fire({
+                    icon: 'error',
+                    title: 'ข้อมูลไม่ครบถ้วน',
+                    text: 'กรุณากรอกข้อมูลผู้ประเมินให้ถูกต้องและครบถ้วน',
+                    confirmButtonColor: '#F472B6'
+                });
+            }
+
+            return isValid;
+        }
+
+        function nextPage() {
+            if (currentPage === 1 && !validateUserInfo()) {
+                return; // Stop if user info is invalid
+            }
+
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            // Check if all questions on the last page are answered
+            const lastPageQuestions = document.querySelectorAll(`#page${totalPages} input[type=radio]`);
+            const lastPageQuestionNames = [...new Set([...lastPageQuestions].map(q => q.name))];
+            let allAnswered = true;
+            for(const name of lastPageQuestionNames) {
+                if(!document.querySelector(`input[name="${name}"]:checked`)){
+                    allAnswered = false;
+                    break;
+                }
+            }
+
+            if(!allAnswered){
+                 Swal.fire({
+                    icon: 'warning',
+                    title: 'ยังตอบไม่ครบ',
+                    text: 'กรุณาตอบคำถามให้ครบทุกข้อก่อนส่งแบบประเมิน',
+                    confirmButtonColor: '#F472B6'
+                });
+                return;
+            }
+
+
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                กำลังส่ง...
+            `;
+            
+            const formData = new FormData(document.getElementById('assessmentForm'));
+            const data = Object.fromEntries(formData.entries());
+            
+            let totalScore = 0;
+            for (let i = 1; i <= questions.length; i++) {
+                totalScore += parseInt(data[`q${i}`] || 0);
+            }
+            data.totalScore = totalScore;
+            
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(response => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'ส่งแบบประเมินสำเร็จ!',
+                    html: `คะแนนรวมของคุณคือ <strong>${totalScore}</strong> คะแนน`,
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#F472B6'
+                }).then(() => {
+                    // Optional: reset the form or redirect
+                    window.location.reload();
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่อีกครั้ง'
+                });
+                submitButton.disabled = false;
+                submitButton.textContent = 'ส่งแบบประเมิน';
+            });
+        }
+        
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuestions();
+            document.getElementById('assessmentForm').addEventListener('submit', handleFormSubmit);
+            // Initially show page 1 and its navigation (which is just 'Next')
+            showPage(1); 
+            // override the navigation update for page 1 to hide nav container
+            document.getElementById('navigationContainer').style.display = 'none'; 
+            document.querySelector('#page1 button').style.display = 'block';
+
+        });
+    </script>
+</body>
+</html>
