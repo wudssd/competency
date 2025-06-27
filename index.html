@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แบบประเมินสมรรถนะนักศึกษา</title>
+    <title>แบบประเมินตนเอง (Self Assessment) สมรรถนะหลักและอัตลักษณ์บัณฑิต ม.วลัยลักษณ์</title>
     
     <!-- Google Fonts: Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,12 +17,31 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
+        /* Pastel Green Theme & Background Image */
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #FFF1F2; /* Light Pink Background */
+            background-color: #F0FDF4; /* green-50 */
+        }
+        /* Blurred Background Image */
+        body::before {
+            content: '';
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            /* Using a proxied URL for direct access */
+            background-image: url('https://drive.google.com/uc?export=view&id=1j2HQ_loVieK9jXNHl7W7NufxwOblpCDj');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) opacity(0.2);
+            -webkit-filter: blur(8px) opacity(0.2);
         }
         .form-container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            backdrop-filter: blur(5px); /* Blur effect for the form container */
+            -webkit-backdrop-filter: blur(5px);
             padding: 2rem;
             border-radius: 1rem;
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -39,7 +58,7 @@
         }
         /* Custom radio button styles */
         .radio-label {
-            border: 2px solid #FBCFE8;
+            border: 2px solid #A7F3D0; /* emerald-200 */
             border-radius: 0.5rem;
             padding: 1rem;
             cursor: pointer;
@@ -47,11 +66,11 @@
             display: block;
         }
         .radio-label:hover {
-            background-color: #FFF1F2;
+            background-color: #D1FAE5; /* emerald-100 */
         }
         input[type="radio"]:checked + .radio-label {
-            background-color: #FCE7F3;
-            border-color: #F472B6;
+            background-color: #ECFDF5; /* green-100 */
+            border-color: #34D399; /* emerald-400 */
         }
         input[type="radio"] {
             display: none; /* Hide the default radio button */
@@ -61,33 +80,38 @@
 <body class="flex items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-3xl">
-        <div class="flex justify-center mb-6">
+        <div class="flex justify-center mb-4">
             <img src="https://www.wu.ac.th/uploads/logoWU_1631668089.png" alt="Walailak University Logo" class="h-16">
         </div>
+         <h1 class="text-xl md:text-2xl font-bold text-center text-gray-700 mb-6">แบบประเมินตนเอง (Self Assessment)<br>สมรรถนะหลักและอัตลักษณ์บัณฑิตมหาวิทยาลัยวลัยลักษณ์</h1>
         
         <div class="form-container">
             <form id="assessmentForm">
                 <!-- Progress Bar -->
                 <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
-                    <div id="progressBar" class="bg-pink-400 h-2.5 rounded-full" style="width: 0%"></div>
+                    <div id="progressBar" class="bg-emerald-400 h-2.5 rounded-full" style="width: 0%"></div>
                 </div>
 
                 <!-- Page 1: User Info -->
                 <div id="page1" class="form-page active">
-                    <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">ข้อมูลผู้ประเมินตนเอง</h2>
+                    <div class="text-gray-600 bg-emerald-50 p-4 rounded-lg mb-6 text-sm">
+                        <p class="font-semibold mb-2">คำชี้แจง:</p>
+                        <p>การประเมินตนเองตามสมรรถนะหลักและอัตลักษณ์บัณฑิตของมหาวิทยาลัยวลัยลักษณ์ มีเป้าหมายเพื่อส่งเสริมให้นักศึกษาได้ตระหนักรู้และพัฒนาทักษะที่จำเป็นต่อการประกอบอาชีพและการใช้ชีวิตในศตวรรษที่ 21 โดยเน้นการเป็น “คนดีและคนเก่ง” ตามอัตลักษณ์บัณฑิตของมหาวิทยาลัย การประเมินตนเองจะช่วยให้นักศึกษาเข้าใจจุดแข็งและจุดที่ควรพัฒนา ตั้งเป้าหมายการพัฒนาตนเอง วางแผนพัฒนาสมรรถนะอย่างต่อเนื่อง</p>
+                    </div>
+                    <h2 class="text-xl font-bold mb-4 text-center text-gray-700">ข้อมูลผู้ประเมินตนเอง</h2>
                     <div class="space-y-4">
                         <div>
                             <label for="studentId" class="block mb-2 text-sm font-medium text-gray-900">รหัสนักศึกษา (8 หลัก)</label>
-                            <input type="text" id="studentId" name="studentId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" placeholder="เช่น 65123456" required>
+                            <input type="text" id="studentId" name="studentId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5" placeholder="เช่น 65123456" required>
                             <p id="studentIdError" class="text-red-500 text-xs mt-1 hidden">กรุณากรอกรหัสนักศึกษาเป็นตัวเลข 8 หลักให้ถูกต้อง</p>
                         </div>
                         <div>
                             <label for="fullName" class="block mb-2 text-sm font-medium text-gray-900">ชื่อ-สกุล</label>
-                            <input type="text" id="fullName" name="fullName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" placeholder="เช่น สมชาย ใจดี" required>
+                            <input type="text" id="fullName" name="fullName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5" placeholder="เช่น สมชาย ใจดี" required>
                         </div>
                         <div>
                             <label for="school" class="block mb-2 text-sm font-medium text-gray-900">สำนักวิชา</label>
-                            <select id="school" name="school" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" required>
+                            <select id="school" name="school" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5" required>
                                 <option value="" disabled selected>-- กรุณาเลือกสำนักวิชา --</option>
                                 <option value="การจัดการ">การจัดการ</option>
                                 <option value="การบัญชีและการเงิน">การบัญชีและการเงิน</option>
@@ -116,6 +140,27 @@
                 <!-- Assessment Pages will be generated by JS -->
                 <div id="assessmentPagesContainer"></div>
 
+                <!-- Page for Final Question (Q17) -->
+                <div id="pageFinalQuestion" class="form-page">
+                    <h2 class="text-xl font-bold mb-4 text-center text-gray-700">ส่วนสุดท้าย</h2>
+                     <div class="my-6">
+                        <p class="font-semibold text-gray-800 mb-3">17. ให้นักศึกษาเลือกสมรรถนะที่นักศึกษาต้องการจะพัฒนาตนเองมากที่สุด (เลือกเพียง 1 ข้อ)</p>
+                        <div class="space-y-3">
+                            <div><input type="radio" id="q17_opt1" name="q17" value="ความเป็นผู้นำ" required><label for="q17_opt1" class="radio-label text-sm">ความเป็นผู้นำ</label></div>
+                            <div><input type="radio" id="q17_opt2" name="q17" value="การทำงานเป็นทีม" required><label for="q17_opt2" class="radio-label text-sm">การทำงานเป็นทีม</label></div>
+                            <div><input type="radio" id="q17_opt3" name="q17" value="การคิดวิเคราะห์" required><label for="q17_opt3" class="radio-label text-sm">การคิดวิเคราะห์</label></div>
+                            <div><input type="radio" id="q17_opt4" name="q17" value="การแก้ไขปัญหา" required><label for="q17_opt4" class="radio-label text-sm">การแก้ไขปัญหา</label></div>
+                            <div><input type="radio" id="q17_opt5" name="q17" value="การสื่อสาร" required><label for="q17_opt5" class="radio-label text-sm">การสื่อสาร</label></div>
+                            <div><input type="radio" id="q17_opt6" name="q17" value="ความคิดสร้างสรรค์" required><label for="q17_opt6" class="radio-label text-sm">ความคิดสร้างสรรค์</label></div>
+                            <div><input type="radio" id="q17_opt7" name="q17" value="การพัฒนาความเป็นวิชาชีพ" required><label for="q17_opt7" class="radio-label text-sm">การพัฒนาความเป็นวิชาชีพ</label></div>
+                            <div><input type="radio" id="q17_opt8" name="q17" value="ความเป็นนานาชาติ" required><label for="q17_opt8" class="radio-label text-sm">ความเป็นนานาชาติ</label></div>
+                            <div><input type="radio" id="q17_opt9" name="q17" value="การเป็นผู้ประกอบการ" required><label for="q17_opt9" class="radio-label text-sm">การเป็นผู้ประกอบการ</label></div>
+                            <div><input type="radio" id="q17_opt10" name="q17" value="ทักษะด้านดิจิทัล" required><label for="q17_opt10" class="radio-label text-sm">ทักษะด้านดิจิทัล</label></div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- Navigation Buttons will be dynamically generated and placed here -->
                 <div id="navigationContainer" class="flex justify-between mt-8"></div>
             </form>
@@ -127,7 +172,7 @@
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbyT03JX_xr_xyuizbnxLchEF4r00Ky3FwKtVVE-0H6F3jnvUfb9yuvRLWexzx_GNV8JfQ/exec';
         
         const questions = [
-            // C1
+            // This array now contains only the 16 scored questions
             {
                 topic: "1. ภาวะผู้นำและผู้เปลี่ยนแปลงทางสังคม",
                 options: [
@@ -164,7 +209,6 @@
                     { text: "ฉันมีความยากลำบากในการระบุและแก้ปัญหา ไม่สามารถเชื่อมโยงข้อมูลหรือปรับตัวได้ ต้องพัฒนาทักษะการวิเคราะห์และการแก้ปัญหาอย่างมาก", value: 1 }
                 ]
             },
-            // C2
              {
                 topic: "5. การสื่อสารอย่างมีประสิทธิภาพ (Effective Communication)",
                 options: [
@@ -201,7 +245,6 @@
                     { text: "ฉันไม่ค่อยแสดงความกตัญญู ไม่ตระหนักถึงพระคุณของผู้อื่น และไม่ได้ตอบแทนคุณอย่างเหมาะสม", value: 1 }
                 ]
             },
-             // C3
             {
                 topic: "9. ทักษะด้านดิจิทัล (Digital Skills)",
                 options: [
@@ -238,7 +281,6 @@
                     { text: "ฉันยังต้องพัฒนาคุณลักษณะของการเป็นผู้ประกอบการ ฉันมีข้อจำกัดในการคิดสร้างสรรค์ หลีกเลี่ยงการทดลองแนวคิดใหม่ ขาดความมุ่งมั่นในการพัฒนา มีปัญหาในการวางแผนและบริหารจัดการ และมีข้อจำกัดในการสื่อสารและนำเสนอผลงาน", value: 1 }
                 ]
             },
-            // C4
             {
                 topic: "13. ทักษะการใฝ่รู้ใฝ่เรียน",
                 options: [
@@ -264,7 +306,7 @@
                     { text: "ฉันใช้ภาษาอังกฤษได้ดี เข้าใจการบรรยายส่วนใหญ่ สามารถแสดงความคิดเห็นและนำเสนองานได้ อ่านตำราและบทความได้เข้าใจ และเขียนรายงานได้ แม้อาจมีข้อผิดพลาดบ้าง", value: 3 },
                     { text: "ฉันใช้ภาษาอังกฤษได้ในระดับพื้นฐาน เข้าใจการบรรยายได้บางส่วน พูดและนำเสนอได้แต่ไม่คล่อง อ่านตำราได้ช้า และเขียนรายงานได้แต่มีข้อผิดพลาดมาก", value: 2 },
                     { text: "ฉันมีความยากลำบากในการใช้ภาษาอังกฤษ มีปัญหาในการเข้าใจการบรรยาย ไม่กล้าพูดหรือนำเสนอ อ่านตำราได้ยาก และเขียนรายงานได้ไม่ดี", value: 1 }
-                ] // <-- FIX: Changed '}' to ']'
+                ]
             },
             {
                 topic: "16. กรอบแนวคิดแบบเติบโต (Growth mindset)",
@@ -279,7 +321,8 @@
 
         const QUESTIONS_PER_PAGE = 4;
         const totalQuestionPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
-        const totalPages = 1 + totalQuestionPages; // 1 for user info page
+        // Total pages = 1 (info) + 4 (assessment) + 1 (final q17) = 6
+        const totalPages = 1 + totalQuestionPages + 1;
         let currentPage = 1;
 
         // --- FUNCTIONS ---
@@ -289,30 +332,27 @@
             let questionCounter = 0;
 
             for (let i = 0; i < totalQuestionPages; i++) {
+                const pageNumber = i + 2;
                 const pageDiv = document.createElement('div');
-                pageDiv.id = `page${i + 2}`;
+                pageDiv.id = `page${pageNumber}`;
                 pageDiv.className = 'form-page';
 
                 const questionsForPage = questions.slice(i * QUESTIONS_PER_PAGE, (i + 1) * QUESTIONS_PER_PAGE);
+                
+                let pageHTML = '';
 
-                let pageHTML = `<h2 class="text-2xl font-bold mb-4 text-center text-gray-700">ส่วนที่ ${i + 1}: ประเมินสมรรถนะ</h2>`;
+                // Add instructions only on the first assessment page (page 2)
+                if(pageNumber === 2){
+                    pageHTML += `<div class="text-gray-600 bg-emerald-50 p-4 rounded-lg mb-6 text-sm"><b>วิธีประเมิน :</b> ให้นักศึกษาอ่านแต่ละสมรรถนะและพฤติกรรมให้ชัดเจน เลือกข้อที่ตรงกับตนเองมากที่สุด</div>`;
+                }
 
-                questionsForPage.forEach((q, index) => {
+                pageHTML += `<h2 class="text-xl font-bold mb-4 text-center text-gray-700">ส่วนที่ ${i + 1}: ประเมินสมรรถนะ</h2>`;
+
+                questionsForPage.forEach((q) => {
                     questionCounter++;
-                    pageHTML += `
-                        <div class="my-6">
-                            <p class="font-semibold text-gray-800 mb-3">${q.topic}</p>
-                            <div class="space-y-3">
-                    `;
+                    pageHTML += `<div class="my-6"><p class="font-semibold text-gray-800 mb-3">${q.topic}</p><div class="space-y-3">`;
                     q.options.forEach((opt, optIndex) => {
-                        pageHTML += `
-                            <div>
-                                <input type="radio" id="q${questionCounter}_opt${optIndex}" name="q${questionCounter}" value="${opt.value}" required>
-                                <label for="q${questionCounter}_opt${optIndex}" class="radio-label text-sm">
-                                    ${opt.text}
-                                </label>
-                            </div>
-                        `;
+                        pageHTML += `<div><input type="radio" id="q${questionCounter}_opt${optIndex}" name="q${questionCounter}" value="${opt.value}" required><label for="q${questionCounter}_opt${optIndex}" class="radio-label text-sm">${opt.text}</label></div>`;
                     });
                     pageHTML += `</div></div>`;
                 });
@@ -322,15 +362,16 @@
         }
         
         function updateProgressBar() {
-            const progress = currentPage > 1 ? ((currentPage - 1) / totalQuestionPages) * 100 : 0;
+            // Progress will be based on the page number out of the total pages
+            const progress = ((currentPage - 1) / (totalPages - 1)) * 100;
             document.getElementById('progressBar').style.width = `${progress}%`;
         }
         
-        function showPage(pageNumber) {
+        function showPage(pageId) {
             document.querySelectorAll('.form-page').forEach(page => {
                 page.classList.remove('active');
             });
-            document.getElementById(`page${pageNumber}`).classList.add('active');
+            document.getElementById(pageId).classList.add('active');
             updateProgressBar();
             updateNavigation();
         }
@@ -355,18 +396,74 @@
                 const nextButton = document.createElement('button');
                 nextButton.type = 'button';
                 nextButton.textContent = 'ถัดไป';
-                nextButton.className = 'bg-pink-500 text-white px-6 py-2 rounded-lg hover:bg-pink-600 transition-colors';
+                nextButton.className = 'bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-600 transition-colors';
                 nextButton.addEventListener('click', nextPage);
                 navContainer.appendChild(nextButton);
             } else {
                 const submitButton = document.createElement('button');
                 submitButton.type = 'submit';
-                submitButton.textContent = 'ส่งแบบประเมิน';
-                submitButton.className = 'bg-green-500 text-white px-8 py-2 rounded-lg hover:bg-green-600 transition-colors font-semibold';
+                submitButton.textContent = 'ส่งข้อมูล'; // Changed button text
+                submitButton.className = 'bg-green-600 text-white px-8 py-2 rounded-lg hover:bg-green-700 transition-colors font-semibold';
                 navContainer.appendChild(submitButton);
             }
             
             navContainer.className = `flex ${justifyContent} mt-8`;
+        }
+        
+        function validateCurrentPage() {
+            let activePageId = document.querySelector('.form-page.active').id;
+            // For assessment pages
+            const assessmentPageMatch = activePageId.match(/^page(\d+)$/);
+            if(assessmentPageMatch){
+                const pageNum = parseInt(assessmentPageMatch[1], 10);
+                if(pageNum > 1){
+                     const currentQuestions = document.querySelectorAll(`#${activePageId} input[type=radio]`);
+                     if(currentQuestions.length === 0) return true; // No questions to validate
+
+                     const questionNames = [...new Set([...currentQuestions].map(q => q.name))];
+                     for (const name of questionNames) {
+                        if (!document.querySelector(`input[name="${name}"]:checked`)) {
+                             Swal.fire({ icon: 'warning', title: 'ยังตอบไม่ครบ', text: 'กรุณาตอบคำถามในหน้านี้ให้ครบทุกข้อ', confirmButtonColor: '#34D399' });
+                             return false;
+                        }
+                     }
+                }
+            }
+             // For the final question page
+            if(activePageId === 'pageFinalQuestion'){
+                 if (!document.querySelector(`input[name="q17"]:checked`)) {
+                     Swal.fire({ icon: 'warning', title: 'ยังตอบไม่ครบ', text: 'กรุณาเลือกสมรรถนะที่ต้องการพัฒนา', confirmButtonColor: '#34D399' });
+                     return false;
+                 }
+            }
+
+            return true;
+        }
+
+        function nextPage() {
+            if (currentPage === 1 && !validateUserInfo()) {
+                return; 
+            }
+            
+            if (currentPage > 1 && !validateCurrentPage()){
+                return;
+            }
+
+            if (currentPage < totalPages) {
+                currentPage++;
+                let nextPageId = `page${currentPage}`;
+                if(currentPage === totalPages){
+                    nextPageId = 'pageFinalQuestion';
+                }
+                showPage(nextPageId);
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(`page${currentPage}`);
+            }
         }
         
         function validateUserInfo() {
@@ -392,7 +489,7 @@
                     icon: 'error',
                     title: 'ข้อมูลไม่ครบถ้วน',
                     text: 'กรุณากรอกข้อมูลผู้ประเมินให้ถูกต้องและครบถ้วน',
-                    confirmButtonColor: '#F472B6'
+                    confirmButtonColor: '#34D399'
                 });
                 if (!studentIdRegex.test(studentIdInput.value)) studentIdInput.focus();
                 else if (fullNameInput.value.trim() === '') fullNameInput.focus();
@@ -402,60 +499,15 @@
             return isValid;
         }
 
-        function nextPage() {
-            if (currentPage === 1 && !validateUserInfo()) {
-                return; 
-            }
-            
-            if (currentPage > 1) {
-                const currentQuestions = document.querySelectorAll(`#page${currentPage} input[type=radio]`);
-                const questionNames = [...new Set([...currentQuestions].map(q => q.name))];
-                let allAnswered = true;
-                for (const name of questionNames) {
-                    if (!document.querySelector(`input[name="${name}"]:checked`)) {
-                        allAnswered = false;
-                        break;
-                    }
-                }
-                if (!allAnswered) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'ยังตอบไม่ครบ',
-                        text: 'กรุณาตอบคำถามในหน้านี้ให้ครบทุกข้อ',
-                        confirmButtonColor: '#F472B6'
-                    });
-                    return;
-                }
-            }
-
-
-            if (currentPage < totalPages) {
-                currentPage++;
-                showPage(currentPage);
-            }
-        }
-        
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                showPage(currentPage);
-            }
-        }
 
         function handleFormSubmit(event) {
             event.preventDefault();
 
-            if (currentPage !== totalPages) return;
+            if (!validateCurrentPage()) return;
 
             const submitButton = event.target.querySelector('button[type="submit"]');
             submitButton.disabled = true;
-            submitButton.innerHTML = `
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                กำลังส่ง...
-            `;
+            submitButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>กำลังส่ง...`;
             
             const formData = new FormData(document.getElementById('assessmentForm'));
             const data = Object.fromEntries(formData.entries());
@@ -469,31 +521,25 @@
             fetch(GAS_URL, {
                 method: 'POST',
                 mode: 'no-cors', 
-                headers: {
-                  'Content-Type': 'text/plain;charset=utf-8'
-                },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(data)
             })
             .then(() => {
                 Swal.fire({
                     icon: 'success',
-                    title: 'ส่งแบบประเมินสำเร็จ!',
-                    html: `คะแนนรวมของคุณคือ <strong>${totalScore}</strong> คะแนน`,
+                    title: 'ส่งข้อมูลสำเร็จ!',
+                    html: `ขอบคุณที่ประเมินตนเองและระบุความต้องการพัฒนา<br><br>ข้อมูลนี้จะเป็นแนวทางสำคัญในการพัฒนาทักษะและสมรรถนะของคุณ เพื่อก้าวสู่การเป็นบัณฑิตที่มีคุณภาพ พร้อมทั้งเป็น “คนดีและคนเก่ง” ตามอัตลักษณ์ของมหาวิทยาลัยวลัยลักษณ์`,
                     confirmButtonText: 'ตกลง',
-                    confirmButtonColor: '#F472B6'
+                    confirmButtonColor: '#10B981' // green-600
                 }).then(() => {
                     window.location.reload();
                 });
             })
             .catch(error => {
                 console.error("Fetch Error:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด',
-                    text: 'ไม่สามารถส่งข้อมูลได้ กรุณาตรวจสอบการเชื่อมต่อและลองใหม่อีกครั้ง'
-                });
+                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'ไม่สามารถส่งข้อมูลได้ กรุณาตรวจสอบการเชื่อมต่อและลองใหม่อีกครั้ง' });
                 submitButton.disabled = false;
-                submitButton.textContent = 'ส่งแบบประเมิน';
+                submitButton.textContent = 'ส่งข้อมูล';
             });
         }
         
@@ -501,7 +547,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderQuestions();
             document.getElementById('assessmentForm').addEventListener('submit', handleFormSubmit);
-            showPage(1); 
+            showPage('page1'); 
         });
     </script>
 </body>
