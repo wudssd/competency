@@ -18,6 +18,9 @@
     
     <style>
         /* Pastel Green Theme & Background Image */
+        html {
+            scroll-behavior: smooth; /* Enables smooth scrolling */
+        }
         body {
             font-family: 'Kanit', sans-serif;
             background-color: #F0FDF4; /* green-50 */
@@ -101,9 +104,9 @@
                     <h2 class="text-xl font-bold mb-4 text-center text-gray-700">ข้อมูลผู้ประเมินตนเอง</h2>
                     <div class="space-y-4">
                         <div>
-                            <label for="studentId" class="block mb-2 text-sm font-medium text-gray-900">รหัสนักศึกษา (8 หลัก)</label>
-                            <input type="text" id="studentId" name="studentId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5" placeholder="เช่น 65123456" required>
-                            <p id="studentIdError" class="text-red-500 text-xs mt-1 hidden">กรุณากรอกรหัสนักศึกษาเป็นตัวเลข 8 หลักให้ถูกต้อง</p>
+                            <label for="studentId" class="block mb-2 text-sm font-medium text-gray-900">รหัสนักศึกษา (8 หลัก ขึ้นต้นด้วย 68)</label>
+                            <input type="text" id="studentId" name="studentId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2.5" placeholder="เช่น 68123456" required>
+                            <p id="studentIdError" class="text-red-500 text-xs mt-1 hidden">กรุณากรอกรหัสนักศึกษาให้ถูกต้อง (ตัวเลข 8 หลัก และขึ้นต้นด้วย 68)</p>
                         </div>
                         <div>
                             <label for="fullName" class="block mb-2 text-sm font-medium text-gray-900">ชื่อ-สกุล</label>
@@ -368,6 +371,9 @@
         }
         
         function showPage(pageId) {
+            // --- NEW: Auto-scroll to top ---
+            window.scrollTo(0, 0);
+
             document.querySelectorAll('.form-page').forEach(page => {
                 page.classList.remove('active');
             });
@@ -402,7 +408,7 @@
             } else {
                 const submitButton = document.createElement('button');
                 submitButton.type = 'submit';
-                submitButton.textContent = 'ส่งข้อมูล'; // Changed button text
+                submitButton.textContent = 'ส่งข้อมูล';
                 submitButton.className = 'bg-green-600 text-white px-8 py-2 rounded-lg hover:bg-green-700 transition-colors font-semibold';
                 navContainer.appendChild(submitButton);
             }
@@ -412,13 +418,12 @@
         
         function validateCurrentPage() {
             let activePageId = document.querySelector('.form-page.active').id;
-            // For assessment pages
             const assessmentPageMatch = activePageId.match(/^page(\d+)$/);
             if(assessmentPageMatch){
                 const pageNum = parseInt(assessmentPageMatch[1], 10);
                 if(pageNum > 1){
                      const currentQuestions = document.querySelectorAll(`#${activePageId} input[type=radio]`);
-                     if(currentQuestions.length === 0) return true; // No questions to validate
+                     if(currentQuestions.length === 0) return true;
 
                      const questionNames = [...new Set([...currentQuestions].map(q => q.name))];
                      for (const name of questionNames) {
@@ -429,7 +434,6 @@
                      }
                 }
             }
-             // For the final question page
             if(activePageId === 'pageFinalQuestion'){
                  if (!document.querySelector(`input[name="q17"]:checked`)) {
                      Swal.fire({ icon: 'warning', title: 'ยังตอบไม่ครบ', text: 'กรุณาเลือกสมรรถนะที่ต้องการพัฒนา', confirmButtonColor: '#34D399' });
@@ -473,7 +477,8 @@
             const studentIdError = document.getElementById('studentIdError');
             let isValid = true;
 
-            const studentIdRegex = /^\d{8}$/;
+            // --- NEW: Updated regex for student ID validation ---
+            const studentIdRegex = /^68\d{6}$/;
             if (!studentIdRegex.test(studentIdInput.value)) {
                 studentIdError.classList.remove('hidden');
                 isValid = false;
@@ -488,7 +493,7 @@
                  Swal.fire({
                     icon: 'error',
                     title: 'ข้อมูลไม่ครบถ้วน',
-                    text: 'กรุณากรอกข้อมูลผู้ประเมินให้ถูกต้องและครบถ้วน',
+                    text: 'กรุณากรอกข้อมูลผู้ประเมินให้ถูกต้องตามเงื่อนไข',
                     confirmButtonColor: '#34D399'
                 });
                 if (!studentIdRegex.test(studentIdInput.value)) studentIdInput.focus();
